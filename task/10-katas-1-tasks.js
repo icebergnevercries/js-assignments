@@ -17,8 +17,15 @@
  *  ]
  */
 function createCompassPoints() {
-    throw new Error('Not implemented');
-    var sides = ['N','E','S','W'];  // use array of cardinal directions only!
+    const abb = ['N', 'NbE', 'NNE', 'NEbN', 'NE', 'NEbE', 'ENE', 'EbN', 'E',
+     'EbS', 'ESE', 'SEbE', 'SE', 'SEbS', 'SSE', 'SbE', 'S',
+      'SbW', 'SSW', 'SWbS', 'SW', 'SWbW', 'WSW', 'WbS',
+       'W', 'WbN', 'WNW', 'NWbW', 'NW', 'NWbN', 'NNW', 'NbW', 'N'];
+    const sides = [];
+    for(let i = 0; i < 32; i++) {
+        sides.push({abbreviation: abb[i], azimuth: i * 11.25})
+    }
+    return sides;
 }
 
 
@@ -137,7 +144,32 @@ function canDominoesMakeRow(dominoes) {
  * [ 1, 2, 4, 5]          => '1,2,4,5'
  */
 function extractRanges(nums) {
-    throw new Error('Not implemented');
+    let str = '';
+    let prev = nums[0];
+    for(let i = 1; i < nums.length; i++) {
+        if(nums[i] - nums[i - 1] !== 1) {
+            if(prev !== nums[i - 1]) {
+                if(nums[i - 1] - prev !== 1) {
+                    str = str === '' ? str.concat(prev.toString(), '-', nums[i - 1].toString()) : str.concat(',', prev.toString(), '-', nums[i - 1].toString());
+                }
+                else {
+                    str = str === '' ? str.concat(prev.toString(), ',', nums[i - 1].toString()) : str.concat(',', prev.toString(), ',', nums[i - 1].toString());
+                }                
+            }
+            else {
+                str = str === '' ? str.concat(prev.toString()) : str.concat(',', prev.toString());
+            }         
+            prev = nums[i];   
+        } else if(i === nums.length - 1) {
+            if(nums[i] - prev !== 1) {
+                str = str === '' ? str.concat(prev.toString(), '-', nums[nums.length - 1].toString()) : str.concat(',', prev.toString(), '-', nums[nums.length - 1].toString());
+            }
+            else {
+                str = str === '' ? str.concat(prev.toString(), ',', nums[nums.length - 1].toString()) : str.concat(',', prev.toString(), ',', nums[nums.length - 1].toString());
+            }
+        }        
+    }
+    return str;
 }
 
 module.exports = {
