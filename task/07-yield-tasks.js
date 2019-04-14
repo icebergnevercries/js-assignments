@@ -32,8 +32,16 @@
  * @return {Iterable.<string>}
  *
  */
-function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+function* get99BottlesOfBeer(n=99) {
+    for (let i = 99; i > 0; i--) {
+        yield `${i} bottle${i > 1 ? 's' : ''} of beer on the wall, ${i} bottle${i > 1 ? 's' : ''} of beer.`;
+        if(i - 1 !== 0) {
+            yield `Take one down and pass it around, ${i - 1} bottle${i - 1 > 1 ? 's' : ''} of beer on the wall.`;
+        }        
+    }
+    yield 'Take one down and pass it around, no more bottles of beer on the wall.';
+    yield 'No more bottles of beer on the wall, no more bottles of beer.';
+    yield 'Go to the store and buy some more, 99 bottles of beer on the wall.';
 }
 
 
@@ -47,7 +55,11 @@ function* get99BottlesOfBeer() {
  *
  */
 function* getFibonacciSequence() {
-    throw new Error('Not implemented');
+    let f1 = 0, f2 = 1;
+    while (f1 + f2 < Number.MAX_VALUE) {
+        yield f1;
+        [f1, f2] = [f2, f1 + f2]
+    }
 }
 
 
@@ -82,7 +94,16 @@ function* getFibonacciSequence() {
  *
  */
 function* depthTraversalTree(root) {
-    throw new Error('Not implemented');
+    const arr = [root];
+    while(arr.length > 0) {
+        root = arr.pop();
+        yield root;
+        if(typeof(root.children) !== "undefined") {
+            for(let el of root.children.reverse()) {
+                arr.push(el);
+            }
+        }
+    }
 }
 
 
@@ -108,7 +129,18 @@ function* depthTraversalTree(root) {
  *
  */
 function* breadthTraversalTree(root) {
-    throw new Error('Not implemented');
+    const arr = [[root]];
+    while (arr.length) {
+        const depth = arr.shift();
+        for (let key of depth) {
+            yield key;
+        }
+        for (let key of depth) {
+            if (key.children) {
+                arr.push(key.children);
+            }
+        }
+    }
 }
 
 
@@ -126,7 +158,20 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    let s1 = source1(), s2 = source2();
+    let el1 = s1.next().value;
+    let el2 = s2.next().value;
+    while (true) {
+        if ((el1 < el2 || el2 === undefined) && el1 !== undefined) {
+            yield el1;
+            el1 = s1.next().value;
+        } else if (el2 !== undefined) {
+            yield el2;
+            el2 = s2.next().value;
+        } else {
+            break;
+        }
+    }        
 }
 
 
