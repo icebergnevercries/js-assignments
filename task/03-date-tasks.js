@@ -22,7 +22,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-   throw new Error('Not implemented');
+   return new Date(value);
 }
 
 /**
@@ -37,7 +37,7 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
-   throw new Error('Not implemented');
+   return new Date(value);
 }
 
 
@@ -56,7 +56,18 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
+   if (date.getFullYear() % 4 !== 0) {
+      return false;
+   } 
+   else if (date.getFullYear() % 100 !== 0) {
+      return true;
+   }
+   else if (date.getFullYear() % 400 !== 0) {
+      return false;
+   }
+   else {
+      return true;
+   }
 }
 
 
@@ -76,7 +87,16 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+   let hour = endDate.getHours() - startDate.getHours();
+   hour = hour < 10 ? '0'.concat(hour.toString()) : hour.toString();
+   let minute = endDate.getMinutes() - startDate.getMinutes();
+   minute = minute < 10 ? '0'.concat(minute.toString()) : minute.toString();
+   let second = endDate.getSeconds() - startDate.getSeconds();
+   second = second < 10 ? '0'.concat(second.toString()) : second.toString();
+   let millisecond = endDate.getMilliseconds() - startDate.getMilliseconds();
+   millisecond = millisecond < 100 ? millisecond < 10 ? '00'.concat(millisecond.toString()) : '0'.concat(millisecond.toString()) : millisecond.toString();
+
+   return hour.concat(':', minute, ':', second, '.', millisecond);
 }
 
 
@@ -94,7 +114,9 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+    let degree = 0.5 * (60 * (date.getUTCHours() < 12 ? date.getUTCHours() : date.getUTCHours() - 12) - 11 * date.getUTCMinutes());
+    degree = Math.abs(degree <= 180 ? degree : degree - 180);
+    return Math.PI * degree / 180;
 }
 
 
